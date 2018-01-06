@@ -1,0 +1,21 @@
+.rootWrap {
+  display: flex;
+  min-height: 100vh;
+  background-color: gray;
+
+  .navWrap {
+    background-color: lightgreen;
+  }
+  .headerWrap {
+    display: flex;
+    flex-direction: column;
+
+    flex-grow: 100;
+    background-color: pink;
+
+    .contentWrap {
+      flex-grow: 100;
+      background-color: lightblue;
+    }
+  }
+}

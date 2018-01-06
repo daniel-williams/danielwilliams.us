@@ -1,0 +1,15 @@
+.breadcrumbs {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  .breadcrumb {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+
+    .item, .divider {
+      margin-left: 10px;
+    }
+  }
+}
