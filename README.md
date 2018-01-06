@@ -1,15 +1,14 @@
-# React MobX Nimble
-Nimble React starter using JSX, Typescript, Webpack 3 and MobX for state management.
+# danielwilliams.us
+Personal website based on my [React MobX Nimble](https://github.com/daniel-williams/react-mobx-nimble) starter.
 
 # Table of Contents
 * [Overview](#overview)
 * [Quick start](#quick-start)
 * [File structure](#file-structure)
-* [Useful links](#useful-links)
 * [Author](#author)
 
 ## Overview
-This starter includes a sample React Todo app which demostrates MobX integration and patterns. It's primary purpose is educational and to serve as a hacking starter.
+Using JSX, Typescript, Webpack 3 and MobX for state management.
 
 ### Features
 * [Mobx](https://github.com/mobxjs/mobx)
@@ -34,14 +33,10 @@ This starter includes a sample React Todo app which demostrates MobX integration
 Clone or Fork this repo to get started
 
 ```bash
-$ git clone https://github.com/daniel-williams/react-mobx-nimble
+$ git clone https://github.com/daniel-williams/danielwilliams.us
 ```
 Install dependencies
 ```bash
-# using yarn
-$ yarn
-
-# using npm
 $ npm i
 ```
 
@@ -79,17 +74,12 @@ root
  ├──package.json               * Node Package Manager project file
  ├──README.md                  * this file
  ├──tsconfig.json              * Typescript environment configuration
- ├──yarn.lock                  * auto-generated file for consistent dependency versioning
  │
  └──dist/                      * prod/stag builds output files here
 ```
-
-## Useful links
-
-[MobX](https://mobxjs.github.io/mobx/)
 
 ## Author
 
 Daniel Williams
 
-<https://github.com/daniel-williams/react-mobx-nimble>
+<https://github.com/daniel-williams/danielwilliams.us>
