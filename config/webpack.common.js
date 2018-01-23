@@ -20,6 +20,7 @@ module.exports = function (options) {
       'polyfills': './src/polyfills.tsx',
       'vendor': './src/vendor.tsx',
       'vendorStyles': [
+        './client/assets/styles/transitions.css',
         './client/assets/styles/font-awesome.css',
       ],
     },

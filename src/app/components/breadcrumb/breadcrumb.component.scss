@@ -1,0 +1,18 @@
+.crumbWrap {
+  position: relative;
+  opacity: 0;
+  transform: translateX(-100%);
+  background-color: #fafafa;
+
+  .crumb {
+    display: flex;
+
+    .divider {
+      margin-right: 10px;
+    }
+
+    .text {
+      margin-right: 10px;
+    }
+  }
+}

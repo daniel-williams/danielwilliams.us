@@ -1,8 +1,10 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
+import * as classNames from 'classnames';
 
 import { EmptyState } from '../../models';
+import { Breadcrumb } from './breadcrumb.component';
 import * as styles from './breadcrumbs.component.scss';
 
 
@@ -13,12 +15,18 @@ interface BreadcrumbsProps {
 }
 
 class BreadcrumbsComponent extends React.Component<BreadcrumbsProps, EmptyState> {
+
+  componentDidMount() {
+    const crumbs = document.querySelectorAll('.crumb-list .item');
+    console.log('found crumbs: ', crumbs.length);
+  }
+
   render() {
     const { match, location, history } = this.props;
     const crumbs = this.buildCrumbs(location.pathname);
 
     return (
-      <div className={styles.breadcrumbs}>
+      <div className={styles.breadcrumbsWrap}>
         {crumbs}
       </div>
     )
@@ -38,17 +46,21 @@ class BreadcrumbsComponent extends React.Component<BreadcrumbsProps, EmptyState>
     }, {items: [homeCrumb], prefix});
 
     return items.map((x, i) => {
-      const divider = i > 0
-        ? <div className={styles.divider}>&gt;</div>
-        : null;
-      const link = x.path !== pathname
-        ? <Link to={x.path} className={styles.item}>{x.text}</Link>
-        : <div className={styles.item}>{x.text}</div>;
+      const {id, text, path} = x;
+      const isLink = x.path !== pathname;
+      const showDivider = i > 0;
+      console.log('WTF: ', showDivider, i);
+      const style = {
+        zIndex: 10 - i,
+      };
 
       return (
-        <div key={x.id} className={styles.breadcrumb}>
-          {divider}
-          {link}
+        <div key={text} className={styles.breadcrumbWrap} style={style}>
+          <Breadcrumb
+            text={text}
+            path={path}
+            isLink={isLink}
+            showDivider={showDivider} />
         </div>
       );
     });

@@ -5,5 +5,13 @@ html, body {
 }
 
 html {
-  background-color: lightgray;
+  background-color: #fafafa;
+}
+
+a {
+  text-decoration: none;
+
+  &:visited, &:active, &:focus, &:hover {
+    text-decoration: none;
+  }
 }

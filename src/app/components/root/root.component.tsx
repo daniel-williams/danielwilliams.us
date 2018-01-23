@@ -8,13 +8,12 @@ import * as styles from './root.component.scss';
 
 const Projects = () => {
   return (
-    <div>
-      <Switch>
-        <Route path='/projects/one' component={ProjectOne} />
-        <Route path='/projects/two' component={ProjectTwo} />
-        <Route path='/projects/three' component={ProjectThree} />
-      </Switch>
-    </div>
+    <Switch>
+      <Route exact path='/projects' component={ProjectsHome} />
+      <Route path='/projects/one' component={ProjectOne} />
+      <Route path='/projects/two' component={ProjectTwo} />
+      <Route path='/projects/three' component={ProjectThree} />
+    </Switch>
   );
 };
 const ProjectsHome = () => {
@@ -29,7 +28,11 @@ const ProjectsHome = () => {
     </div>
   );
 };
-const ProjectOne = () => <div>Project One</div>;
+const ProjectOne = () => {
+  return (
+    <iframe id="frame" allowFullScreen src="http://localhost:4000/"></iframe>
+  );
+};
 const ProjectTwo = () => <div>Project Two</div>;
 const ProjectThree = () => <div>Project Three</div>;
 
@@ -45,7 +48,6 @@ export const Root = () => (
       <Header></Header>
       <div className={styles.contentWrap}>
         <Switch>
-          <Route exact path='/projects' component={ProjectsHome} />
           <Route path='/projects' component={Projects} />
           <Route path='/albums' component={Albums} />
           <Route path='/about' component={About} />
