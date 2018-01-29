@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import * as TransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import { Link } from 'react-router-dom';
 import * as classNames from 'classnames';
 
@@ -53,7 +53,7 @@ export class Nav extends React.Component<NavProps, NavState> {
         <button onClick={() => this.reset()}>reset</button>
         <button onClick={() => this.addItem()}>add</button>
         <button onClick={() => this.removeItem()}>remove</button>
-        <ReactCSSTransitionGroup
+        <TransitionGroup
           component='div'
           className={styles.linkWrap}
           transitionName={{
@@ -61,13 +61,11 @@ export class Nav extends React.Component<NavProps, NavState> {
             enterActive: styles.enterActive,
             leave: styles.leave,
             leaveActive: styles.leaveActive,
-            // appear: styles.appear,
-            // appearActive: styles.appearActive
           }}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={500}>
           {navLinks}
-        </ReactCSSTransitionGroup>
+        </TransitionGroup>
       </div>
     );
   }

@@ -1,7 +1,5 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import * as classNames from 'classnames';
 import * as gsap from 'gsap';
 
 import * as styles from './breadcrumb.component.scss';
@@ -18,31 +16,40 @@ interface BreadcrumbState {}
 
 
 export class Breadcrumb extends React.Component<BreadcrumbProps, BreadcrumbState> {
-  linkItem;
+  hostEl;
 
   static defaultProps = {
     text: 'link text',
-    isLink: false,
+    isLink: true,
     divider: <div className={styles.divider}>&gt;</div>,
     showDivider: true,
   };
 
-  componentDidMount() {
-    var tween = gsap.TweenLite.to(this.linkItem, .5, {
+  componentWillAppear(cb) {
+    gsap.TweenLite.to(this.hostEl, .5, {
       opacity: 1,
       transform: 'translateX(0)',
+      onComplete: cb,
     });
   }
 
-  componentWillUnmount() {
-    var tween = gsap.TweenLite.to(this.linkItem, .2, {
-      opacity: 0
+  componentWillEnter(cb) {
+    gsap.TweenLite.to(this.hostEl, .5, {
+      opacity: 1,
+      transform: 'translateX(0)',
+      onComplete: cb,
+    });
+  }
+
+  componentWillLeave(cb) {
+    gsap.TweenLite.to(this.hostEl, 0, {
+      opacity: 0,
+      onComplete: cb,
     });
   }
 
   render() {
     const { isLink, path, text, divider, showDivider } = this.props;
-    const cnames = classNames(styles.crumbWrap);
     const crumb = <div className={styles.text}>{text}</div>;
     const content = isLink
       ? <Link to={path}>{crumb}</Link>
@@ -50,8 +57,8 @@ export class Breadcrumb extends React.Component<BreadcrumbProps, BreadcrumbState
 
     return (
       <div
-        className={cnames}
-        ref={(el) => { this.linkItem = el; }}>
+        className={styles.crumbWrap}
+        ref={(el) => { this.hostEl = el; }}>
         <div className={styles.crumb}>
           {showDivider ? divider : null}
           { content }
