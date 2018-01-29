@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Link } from 'react-router-dom';
+import * as classNames from 'classnames';
 
 import { NavMode } from './nav.types';
 import * as styles from './nav.component.scss';
@@ -36,37 +37,42 @@ export class Nav extends React.Component<NavProps, NavState> {
   }
 
   componentWillMount() {
-    navLinks.forEach((x, i) => {
-      setTimeout(() => this.setState({
-        items: [...this.state.items, x]
-      }), 100 * i);
-    });
+    this.reset();
   }
 
   render() {
     const { navMode, test, items } = this.state;
-    const navLinks = items.map(x => {
+    const navLinks = items.map((x, i) => {
       return (
-        <div key={x.path}>
-          <Link className='styles.link' to={x.path}>{x.title}</Link>
-        </div>
+        <Link key={i} className={styles.link} to={x.path}>{x.title}</Link>
       );
     });
 
     return (
       <div className={styles.links}>
-        {/* <button onClick={() => this.doTrans()}>build</button> */}
+        <button onClick={() => this.reset()}>reset</button>
+        <button onClick={() => this.addItem()}>add</button>
+        <button onClick={() => this.removeItem()}>remove</button>
         <ReactCSSTransitionGroup
-          transitionName='example'
+          component='div'
+          className={styles.linkWrap}
+          transitionName={{
+            enter: styles.enter,
+            enterActive: styles.enterActive,
+            leave: styles.leave,
+            leaveActive: styles.leaveActive,
+            // appear: styles.appear,
+            // appearActive: styles.appearActive
+          }}
           transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
+          transitionLeaveTimeout={500}>
           {navLinks}
         </ReactCSSTransitionGroup>
       </div>
     );
   }
 
-  doTrans() {
+  reset() {
     this.setState({
       items: [],
     });
@@ -77,6 +83,23 @@ export class Nav extends React.Component<NavProps, NavState> {
         }), 100 * i);
       });
     }, 300);
+  }
 
+  addItem() {
+    const { items } = this.state;
+
+    this.setState({
+      items: items.slice().concat([{path: '/', title: 'new item'}])
+    });
+  }
+
+  removeItem() {
+    const { items } = this.state;
+
+    if(items.length) {
+      this.setState({
+        items: items.slice(0, items.length - 1)
+      });
+    }
   }
 }

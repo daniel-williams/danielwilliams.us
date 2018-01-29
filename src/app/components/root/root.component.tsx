@@ -30,7 +30,7 @@ const ProjectsHome = () => {
 };
 const ProjectOne = () => {
   return (
-    <iframe id="frame" allowFullScreen src="http://localhost:4000/"></iframe>
+    <iframe id={styles.frame} allowFullScreen src="http://localhost:4000/"></iframe>
   );
 };
 const ProjectTwo = () => <div>Project Two</div>;

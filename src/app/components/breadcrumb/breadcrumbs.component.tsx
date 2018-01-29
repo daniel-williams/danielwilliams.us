@@ -18,7 +18,6 @@ class BreadcrumbsComponent extends React.Component<BreadcrumbsProps, EmptyState>
 
   componentDidMount() {
     const crumbs = document.querySelectorAll('.crumb-list .item');
-    console.log('found crumbs: ', crumbs.length);
   }
 
   render() {
@@ -49,7 +48,6 @@ class BreadcrumbsComponent extends React.Component<BreadcrumbsProps, EmptyState>
       const {id, text, path} = x;
       const isLink = x.path !== pathname;
       const showDivider = i > 0;
-      console.log('WTF: ', showDivider, i);
       const style = {
         zIndex: 10 - i,
       };

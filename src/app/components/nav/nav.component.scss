@@ -8,7 +8,44 @@
   button {
     margin-bottom: 20px;
   }
-  .link {
-    margin-bottom: 5px;
+  .linkWrap {
+    position:relative;
+    display: flex;
+    flex-direction: column;
+
+    .link {
+      display: block;
+      font-size: 20px;
+      line-height: 1.2;
+      margin-bottom: 5px;
+      overflow: hidden;
+    }
   }
+}
+
+
+.enter {
+  opacity: 0.01;
+  transform: translateX(100%);
+  max-height: 0;
+}
+
+.enter.enterActive {
+  opacity: 1;
+  transform: translateX(0);
+  max-height: 100px;
+  transition: max-height .2s ease-out, transform .2s ease-out, opacity .2s ease .1s;
+}
+
+.leave {
+  opacity: 1;
+  transform: translateX(0);
+  max-height: 100px;
+}
+
+.leave.leaveActive {
+  opacity: 0.01;
+  transform: translateX(-100%);
+  max-height: 0px;
+  transition: all 500ms ease;
 }
