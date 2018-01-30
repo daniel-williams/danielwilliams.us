@@ -5,6 +5,8 @@ import * as gsap from 'gsap';
 import * as styles from './breadcrumb.component.scss';
 
 
+var Easing = require('EasePack');
+
 interface BreadcrumbProps {
   path?: string,
   text?: string,
@@ -26,22 +28,32 @@ export class Breadcrumb extends React.Component<BreadcrumbProps, BreadcrumbState
   };
 
   componentWillAppear(cb) {
-    gsap.TweenLite.to(this.hostEl, .5, {
-      opacity: 1,
-      transform: 'translateX(0)',
-      onComplete: cb,
-    });
+    this.fadeIn(cb);
   }
 
   componentWillEnter(cb) {
-    gsap.TweenLite.to(this.hostEl, .5, {
+    this.fadeIn(cb);
+  }
+
+  componentWillLeave(cb) {
+    this.fadeOut(cb);
+  }
+
+  fadeIn(cb) {
+    gsap.TweenLite.fromTo(this.hostEl, 0.3, {
+      opacity: 0,
+      scale: 1.5,
+      // transform: 'translateX(10px)'
+    }, {
       opacity: 1,
-      transform: 'translateX(0)',
+      scale: 1.0,
+      // transform: 'translateX(0)',
+      ease: Easing.easeOut,
       onComplete: cb,
     });
   }
 
-  componentWillLeave(cb) {
+  fadeOut(cb) {
     gsap.TweenLite.to(this.hostEl, 0, {
       opacity: 0,
       onComplete: cb,
@@ -50,7 +62,7 @@ export class Breadcrumb extends React.Component<BreadcrumbProps, BreadcrumbState
 
   render() {
     const { isLink, path, text, divider, showDivider } = this.props;
-    const crumb = <div className={styles.text}>{text}</div>;
+    const crumb = <div ref={(el) => { this.hostEl = el; }} className={styles.text}>{text}</div>;
     const content = isLink
       ? <Link to={path}>{crumb}</Link>
       : crumb;
@@ -58,7 +70,7 @@ export class Breadcrumb extends React.Component<BreadcrumbProps, BreadcrumbState
     return (
       <div
         className={styles.crumbWrap}
-        ref={(el) => { this.hostEl = el; }}>
+        >
         <div className={styles.crumb}>
           {showDivider ? divider : null}
           { content }

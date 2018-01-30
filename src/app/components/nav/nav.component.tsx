@@ -1,11 +1,12 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import * as TransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import * as CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import { Link } from 'react-router-dom';
 import * as classNames from 'classnames';
 
 import { NavMode } from './nav.types';
 import * as styles from './nav.component.scss';
+
 
 interface NavLink {
   path: string;
@@ -43,30 +44,44 @@ export class Nav extends React.Component<NavProps, NavState> {
   render() {
     const { navMode, test, items } = this.state;
     const navLinks = items.map((x, i) => {
-      return (
-        <Link key={i} className={styles.link} to={x.path}>{x.title}</Link>
-      );
+      return i === 0
+        ? this.renderButtonLink(i.toString(), x.path, x.title)
+        : this.renderTextLink(i.toString(), x.path, x.title)
     });
 
     return (
       <div className={styles.links}>
-        <button onClick={() => this.reset()}>reset</button>
-        <button onClick={() => this.addItem()}>add</button>
-        <button onClick={() => this.removeItem()}>remove</button>
-        <TransitionGroup
+        <CSSTransitionGroup
           component='div'
           className={styles.linkWrap}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
           transitionName={{
             enter: styles.enter,
             enterActive: styles.enterActive,
             leave: styles.leave,
             leaveActive: styles.leaveActive,
-          }}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}>
+          }}>
           {navLinks}
-        </TransitionGroup>
+        </CSSTransitionGroup>
       </div>
+    );
+  }
+
+  renderButtonLink(key: string, path: string, title: string) {
+    const src = `/assets/images/${title.toLowerCase()}.jpg`;
+    return (
+      <Link key={key} className={styles.buttonLink} to={path}>
+        <div className={styles.button}>
+          <img src={src} />
+        </div>
+      </Link>
+    );
+  }
+
+  renderTextLink(key: string, path: string, title: string) {
+    return (
+      <Link key={key} className={styles.textLink} to={path}>{title}</Link>
     );
   }
 
@@ -81,23 +96,5 @@ export class Nav extends React.Component<NavProps, NavState> {
         }), 100 * i);
       });
     }, 300);
-  }
-
-  addItem() {
-    const { items } = this.state;
-
-    this.setState({
-      items: items.slice().concat([{path: '/', title: 'new item'}])
-    });
-  }
-
-  removeItem() {
-    const { items } = this.state;
-
-    if(items.length) {
-      this.setState({
-        items: items.slice(0, items.length - 1)
-      });
-    }
   }
 }

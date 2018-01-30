@@ -9,6 +9,8 @@ import { Nav } from '../nav';
 import * as styles from './root.component.scss';
 
 
+var Easing = require('EasePack');
+
 export const Root = withRouter(class extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -44,35 +46,28 @@ export const Root = withRouter(class extends React.Component<any, any> {
 function fadeUp(Component) {
   return class FadesUp extends React.Component {
     componentWillAppear(cb) {
-      const hostEl = findDOMNode(this);
-      gsap.TweenLite.fromTo(
-        hostEl,
-        0.3,
-        {
-          transform: 'translateY(40px)',
-          opacity: 0
-        },
-        {
-          transform: 'translateY(0)',
-          opacity: 1,
-          onComplete: cb
-        }
-      );
+      this.fadeIn(cb);
     }
 
     componentWillEnter(cb) {
+      this.fadeIn(cb);
+    }
+
+    fadeIn(cb) {
       const hostEl = findDOMNode(this);
       gsap.TweenLite.fromTo(
         hostEl,
         0.3,
         {
-          transform: 'translateY(40px)',
-          opacity: 0
+          transform: 'translateY(20px)',
+          opacity: 0,
         },
         {
           transform: 'translateY(0)',
           opacity: 1,
-          onComplete: cb
+          ease: Easing.easeOut,
+          delay: 0.3,
+          onComplete: cb,
         }
       );
     }

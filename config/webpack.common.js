@@ -26,6 +26,7 @@ module.exports = function (options) {
     resolve: {
       extensions: ['*', '.js', '.jsx', '.ts', '.tsx', '.css', '.scss'],
       alias: {
+        'EasePack': 'gsap/src/uncompressed/easing/EasePack',
         styles: helpers.root('client', 'assets', 'styles'),
       }
     },
