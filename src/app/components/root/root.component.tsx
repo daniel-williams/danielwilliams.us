@@ -1,11 +1,105 @@
 import * as React from 'react';
-import { Link, Switch, Route } from 'react-router-dom';
+import { findDOMNode } from 'react-dom';
+import { Link, Switch, Route, withRouter } from 'react-router-dom';
+import * as TransitionGroup from 'react-transition-group/TransitionGroup';
+import * as gsap from 'gsap';
 
 import { Header } from '../header';
 import { Nav } from '../nav';
 import * as styles from './root.component.scss';
 
 
+export const Root = withRouter(class extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { location } = this.props;
+
+    return (
+      <div className={styles.rootWrap}>
+        <div className={styles.navWrap}>
+          <Nav></Nav>
+        </div>
+        <div className={styles.headerWrap}>
+          <Header></Header>
+          <TransitionGroup>
+            <RouteFade key={location.pathname}>
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route path='/projects' component={Projects} />
+                <Route path='/albums' component={Albums} />
+                <Route path='/about' component={About} />
+              </Switch>
+            </RouteFade>
+          </TransitionGroup>
+        </div>
+      </div>
+    );
+  }
+});
+
+
+function fadeUp(Component) {
+  return class FadesUp extends React.Component {
+    componentWillAppear(cb) {
+      const hostEl = findDOMNode(this);
+      gsap.TweenLite.fromTo(
+        hostEl,
+        0.3,
+        {
+          transform: 'translateY(40px)',
+          opacity: 0
+        },
+        {
+          transform: 'translateY(0)',
+          opacity: 1,
+          onComplete: cb
+        }
+      );
+    }
+
+    componentWillEnter(cb) {
+      const hostEl = findDOMNode(this);
+      gsap.TweenLite.fromTo(
+        hostEl,
+        0.3,
+        {
+          transform: 'translateY(40px)',
+          opacity: 0
+        },
+        {
+          transform: 'translateY(0)',
+          opacity: 1,
+          onComplete: cb
+        }
+      );
+    }
+
+    render () {
+      return (
+        <Component {...this.props} />
+      );
+    }
+  }
+}
+
+const RouteFade = fadeUp(class extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className={styles.contentWrap}>{this.props.children}</div>
+    );
+  }
+});
+
+const Home = () => <div>Home</div>;
+const Albums = () => <div>Albums</div>;
+const About = () => <div>About</div>;
 const Projects = () => {
   return (
     <Switch>
@@ -35,26 +129,3 @@ const ProjectOne = () => {
 };
 const ProjectTwo = () => <div>Project Two</div>;
 const ProjectThree = () => <div>Project Three</div>;
-
-const Albums = () => <div>Albums</div>;
-const About = () => <div>About</div>;
-
-export const Root = () => (
-  <div className={styles.rootWrap}>
-    <div className={styles.navWrap}>
-      <Nav></Nav>
-    </div>
-    <div className={styles.headerWrap}>
-      <Header></Header>
-      <div className={styles.contentWrap}>
-        <Switch>
-          <Route path='/projects' component={Projects} />
-          <Route path='/albums' component={Albums} />
-          <Route path='/about' component={About} />
-        </Switch>
-      </div>
-    </div>
-  </div>
-);
-
-
