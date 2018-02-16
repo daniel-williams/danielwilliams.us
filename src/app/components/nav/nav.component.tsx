@@ -6,25 +6,15 @@ import * as classNames from 'classnames';
 
 import { NavMode } from './nav.types';
 import * as styles from './nav.component.scss';
+import { linkData, LinkItem } from './NavData';
 
 
-interface NavLink {
-  path: string;
-  title: string;
-}
 interface NavProps {}
 interface NavState {
   navMode: NavMode,
   test: string,
-  items: NavLink[],
+  items: LinkItem[],
 }
-
-const navLinks = [
-  { path: '/', title: 'Home' },
-  { path: '/projects', title: 'Projects' },
-  { path: '/albums', title: 'Seattle life' },
-  { path: '/about', title: 'About me' },
-];
 
 export class Nav extends React.Component<NavProps, NavState> {
   constructor(props) {
@@ -45,8 +35,8 @@ export class Nav extends React.Component<NavProps, NavState> {
     const { navMode, test, items } = this.state;
     const navLinks = items.map((x, i) => {
       return i === 0
-        ? this.renderButtonLink(i.toString(), x.path, x.title)
-        : this.renderTextLink(i.toString(), x.path, x.title)
+        ? this.renderButtonLink(i.toString(), x.path, x.text)
+        : this.renderTextLink(i.toString(), x.path, x.text)
     });
 
     return (
@@ -68,8 +58,8 @@ export class Nav extends React.Component<NavProps, NavState> {
     );
   }
 
-  renderButtonLink(key: string, path: string, title: string) {
-    const src = `/assets/images/${title.toLowerCase()}.jpg`;
+  renderButtonLink(key: string, path: string, text: string) {
+    const src = `/assets/images/${text.toLowerCase()}.jpg`;
     return (
       <Link key={key} className={styles.buttonLink} to={path}>
         <div className={styles.button}>
@@ -79,9 +69,9 @@ export class Nav extends React.Component<NavProps, NavState> {
     );
   }
 
-  renderTextLink(key: string, path: string, title: string) {
+  renderTextLink(key: string, path: string, text: string) {
     return (
-      <Link key={key} className={styles.textLink} to={path}>{title}</Link>
+      <Link key={key} className={styles.textLink} to={path}>{text}</Link>
     );
   }
 
@@ -90,7 +80,7 @@ export class Nav extends React.Component<NavProps, NavState> {
       items: [],
     });
     setTimeout(() => {
-      navLinks.forEach((x, i) => {
+      linkData.forEach((x, i) => {
         setTimeout(() => this.setState({
           items: [...this.state.items, x]
         }), 100 * i);
