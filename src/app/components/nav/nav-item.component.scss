@@ -1,0 +1,28 @@
+.link {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 10px 0;
+
+  font-size: 30px;
+  line-height: 30px;
+
+  &, &:active, &:focus, &:visited, &:hover {
+    text-decoration: none;
+    color: blue;
+  }
+  &:hover {
+    background-color: lightgray;
+  }
+
+  .icon {
+    width: 50px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .text {
+    width: 170px;
+    text-align: left;
+    white-space: nowrap;
+  }
+}

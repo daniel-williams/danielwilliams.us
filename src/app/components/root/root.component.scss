@@ -1,27 +1,33 @@
 .rootWrap {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 
-  .headerWrap {
+  .bodyWrap {
+    position: relative;
     display: flex;
-    flex-direction: column;
-
+    flex-direction: row;
     flex-grow: 100;
 
-    .contentWrap {
-      position: relative;
-      flex-grow: 100;
+    .content {
+      flex-shrink: 1;
+      flex-grow: 1;
+      padding: 0 15px 0;
     }
   }
 }
 
-#frame {
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 0px solid transparent;
+.contentWrap {
+  background-color: lightpink;
 }
+
+// #frame {
+//   position: absolute;
+//   display: block;
+//   width: 100%;
+//   height: 100%;
+//   border: 0px solid transparent;
+// }
 /* #frame {
     -ms-zoom: 0.75;
     -moz-transform: scale(0.75);
