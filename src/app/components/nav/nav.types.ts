@@ -13,10 +13,10 @@ class LinkItem {
 }
 
 const linkData = [
-  new LinkItem('/', 'Home', 'far fa-user'),
-  new LinkItem('/projects', 'Projects', 'far fa-user'),
-  new LinkItem('/albums', 'Seattle life', 'far fa-user'),
-  new LinkItem('/about', 'About', 'far fa-user'),
+  new LinkItem('/', 'Home', 'fas fa-exclamation'),
+  new LinkItem('/projects', 'Projects', 'far fa-file-code'),
+  new LinkItem('/albums', 'Seattle life', 'fas fa-film'),
+  new LinkItem('/about', 'About', 'far fa-address-card'),
 ];
 
 export {
