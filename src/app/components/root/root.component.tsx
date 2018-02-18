@@ -7,6 +7,7 @@ import * as gsap from 'gsap';
 import { Header } from '../header';
 import { Nav } from '../nav';
 import * as styles from './root.component.scss';
+import { BreakpointService } from '../shared';
 
 
 var Easing = require('EasePack');
@@ -124,7 +125,14 @@ const ProjectOne = () => {
     <iframe id={styles.frame} allowFullScreen src="http://localhost:4000/"></iframe>
   );
 };
-const ProjectTwo = () => <div>Project Two</div>;
+const ProjectTwo = () => {
+  return (
+    <BreakpointService>
+      {(breakpoint) => <div>Project Two: {breakpoint}</div> }
+    </BreakpointService>
+  );
+}
+
 const ProjectThree = () => {
   return (
     <div>
