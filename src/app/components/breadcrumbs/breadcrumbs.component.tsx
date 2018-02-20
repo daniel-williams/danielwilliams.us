@@ -2,7 +2,7 @@ import * as React from 'react';
 import { withRouter } from 'react-router-dom';
 import * as TransitionGroup from 'react-transition-group/TransitionGroup';
 
-import { Crumb } from './Crumb';
+import { Crumb } from './breadcrumbs.types';
 import { Breadcrumb } from './breadcrumb.component';
 import * as styles from './breadcrumbs.component.scss';
 
@@ -14,7 +14,7 @@ interface BreadcrumbsProps {
 }
 interface BreadcrumbState {}
 
-class BreadcrumbsComponent extends React.Component<BreadcrumbsProps, BreadcrumbState> {
+const Breadcrumbs = withRouter(class extends React.Component<BreadcrumbsProps, BreadcrumbState> {
   render() {
     const { match, location, history } = this.props;
     const breadcrumbs = this.getCrumbsFromUrl(location.pathname).map((crumb, i) => {
@@ -40,6 +40,8 @@ class BreadcrumbsComponent extends React.Component<BreadcrumbsProps, BreadcrumbS
       return crumbs.concat([new Crumb(pathSegment, crumbs[crumbs.length - 1].path + '/' + pathSegment, pathSegment)]);
     }, [new Crumb('0', '', 'home')]);
   }
-}
+});
 
-export const Breadcrumbs = withRouter(BreadcrumbsComponent);
+export {
+  Breadcrumbs
+};

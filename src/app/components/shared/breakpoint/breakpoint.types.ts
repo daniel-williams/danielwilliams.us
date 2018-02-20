@@ -6,6 +6,13 @@ enum Breakpoint {
   XS = 'XS',
 }
 
+const compactModes = [
+  Breakpoint.XS,
+  Breakpoint.SM,
+  Breakpoint.MD,
+];
+
 export {
   Breakpoint,
+  compactModes,
 }

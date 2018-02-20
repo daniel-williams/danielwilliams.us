@@ -43,11 +43,9 @@ export class Breadcrumb extends React.Component<BreadcrumbProps, BreadcrumbState
     gsap.TweenLite.fromTo(this.hostEl, 0.3, {
       opacity: 0,
       scale: 1.5,
-      // transform: 'translateX(10px)'
     }, {
       opacity: 1,
       scale: 1.0,
-      // transform: 'translateX(0)',
       ease: Easing.easeOut,
       onComplete: cb,
     });

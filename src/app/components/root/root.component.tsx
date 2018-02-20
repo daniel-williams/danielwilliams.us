@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
+import * as classNames from 'classnames';
 import * as TransitionGroup from 'react-transition-group/TransitionGroup';
 import * as gsap from 'gsap';
 
-import { Header } from '../header';
+import { Breadcrumbs } from '../breadcrumbs';
 import { Nav } from '../nav';
 import * as styles from './root.component.scss';
-import { BreakpointService } from '../shared';
+import { Breakpoint, BreakpointService, compactModes } from '../shared';
 
 
 var Easing = require('EasePack');
@@ -21,29 +22,40 @@ export const Root = withRouter(class extends React.Component<any, any> {
     const { location } = this.props;
 
     return (
-      <div className={styles.rootWrap}>
-        <div className={styles.headerWrap}>
-          <Header></Header>
-        </div>
-        <div className={styles.bodyWrap}>
-          <Nav></Nav>
-          <div className={styles.content}>
-            <TransitionGroup component='div'>
-              <RouteFade key={location.pathname}>
-                <Switch>
-                  <Route exact path='/' component={Home} />
-                  <Route path='/projects' component={Projects} />
-                  <Route path='/albums' component={Albums} />
-                  <Route path='/about' component={About} />
-                </Switch>
-              </RouteFade>
-            </TransitionGroup>
+      <BreakpointService>{breakpoint =>
+        <div className={styles.rootWrap}>
+          <div className={styles.navWrap}>
+            <Nav></Nav>
+          </div>
+          <div className={this.getNames(breakpoint)}>
+            <div className={styles.breadcrumbWrap}>
+              <Breadcrumbs></Breadcrumbs>
+            </div>
+            <div className={styles.contentInnerWrap}>
+              <TransitionGroup component='div'>
+                <RouteFade key={location.pathname}>
+                  <Switch>
+                    <Route exact path='/' component={Home} />
+                    <Route path='/projects' component={Projects} />
+                    <Route path='/albums' component={Albums} />
+                    <Route path='/about' component={About} />
+                  </Switch>
+                </RouteFade>
+              </TransitionGroup>
+            </div>
           </div>
         </div>
-      </div>
+      }</BreakpointService>
     );
   }
+
+  getNames(breakpoint: Breakpoint) {
+    return classNames(styles.contentOuterWrap, {
+      [styles.compact]: compactModes.includes(breakpoint)
+    });
+  }
 });
+
 
 
 function fadeUp(Component) {
@@ -132,7 +144,6 @@ const ProjectTwo = () => {
     </BreakpointService>
   );
 }
-
 const ProjectThree = () => {
   return (
     <div>
