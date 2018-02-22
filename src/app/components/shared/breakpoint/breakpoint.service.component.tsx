@@ -7,16 +7,27 @@ import 'rxjs/add/operator/map';
 
 import { Breakpoint } from './breakpoint.types';
 
-const EVENT_RESIZE = `resize`
+let resize$: Observable<any> = null;
 
-const getSize = () => {
+const EVENT_RESIZE = `resize`;
+const RESIZE_DEBOUNCE_INTEVAL = 100;
+const getViewportDimensions = () => {
   const {
-    clientHeight: height = 0,
     clientWidth: width = 0,
+    clientHeight: height = 0,
   } = window.document.body || {};
 
-  return { height, width };
+  return { width, height };
 }
+const initResizeEventStream = () => {
+  if(!resize$) {
+    resize$ = Observable
+      .fromEvent(window, EVENT_RESIZE)
+      .debounceTime(RESIZE_DEBOUNCE_INTEVAL)
+      .map(getViewportDimensions);
+  }
+};
+
 
 interface BreakpointServiceProps {
   children: (breakpoint: Breakpoint) => any,
@@ -27,7 +38,6 @@ interface BreakpointServiceState {
 }
 
 export class BreakpointService extends React.Component<BreakpointServiceProps, BreakpointServiceState> {
-  resize$: Observable<any>;
   subs: Subscription[] = [];
 
   constructor(props) {
@@ -37,11 +47,10 @@ export class BreakpointService extends React.Component<BreakpointServiceProps, B
   }
 
   componentDidMount() {
-    if(window) {
-      this.resize$ = Observable.fromEvent(window, EVENT_RESIZE).debounceTime(100).map(getSize);
-      this.subs.push(this.resize$.subscribe(this.onResize));
-      this.onResize(getSize());
-    }
+    initResizeEventStream();
+    this.onResize(getViewportDimensions());
+
+    this.subs.push(resize$.subscribe(this.onResize));
   }
 
   componentWillUnmount() {

@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
 import * as classNames from 'classnames';
-import * as TransitionGroup from 'react-transition-group/TransitionGroup';
-import * as gsap from 'gsap';
 
 import { Breadcrumbs } from '../breadcrumbs';
 import { Nav } from '../nav';
+import {
+  Breakpoint,
+  BreakpointService,
+  compactModes,
+  RouteTransition } from '../shared';
 import * as styles from './root.component.scss';
-import { Breakpoint, BreakpointService, compactModes } from '../shared';
 
-
-var Easing = require('EasePack');
 
 export const Root = withRouter(class extends React.Component<any, any> {
   constructor(props) {
@@ -32,16 +31,14 @@ export const Root = withRouter(class extends React.Component<any, any> {
               <Breadcrumbs></Breadcrumbs>
             </div>
             <div className={styles.contentInnerWrap}>
-              <TransitionGroup component='div'>
-                <RouteFade key={location.pathname}>
-                  <Switch>
-                    <Route exact path='/' component={Home} />
-                    <Route path='/projects' component={Projects} />
-                    <Route path='/albums' component={Albums} />
-                    <Route path='/about' component={About} />
-                  </Switch>
-                </RouteFade>
-              </TransitionGroup>
+              <RouteTransition>
+                <Switch>
+                  <Route exact path='/' component={Home} />
+                  <Route path='/projects' component={Projects} />
+                  <Route path='/albums' component={Albums} />
+                  <Route path='/about' component={About} />
+                </Switch>
+              </RouteTransition>
             </div>
           </div>
         </div>
@@ -53,57 +50,6 @@ export const Root = withRouter(class extends React.Component<any, any> {
     return classNames(styles.contentOuterWrap, {
       [styles.compact]: compactModes.includes(breakpoint)
     });
-  }
-});
-
-
-
-function fadeUp(Component) {
-  return class FadesUp extends React.Component {
-    componentWillAppear(cb) {
-      this.fadeIn(cb);
-    }
-
-    componentWillEnter(cb) {
-      this.fadeIn(cb);
-    }
-
-    fadeIn(cb) {
-      const hostEl = findDOMNode(this);
-      gsap.TweenLite.fromTo(
-        hostEl,
-        0.3,
-        {
-          transform: 'translateY(20px)',
-          opacity: 0,
-        },
-        {
-          transform: 'translateY(0)',
-          opacity: 1,
-          ease: Easing.easeOut,
-          delay: 0.3,
-          onComplete: cb,
-        }
-      );
-    }
-
-    render () {
-      return (
-        <Component {...this.props} />
-      );
-    }
-  }
-}
-
-const RouteFade = fadeUp(class extends React.Component<any, any> {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div className={styles.contentWrap}>{this.props.children}</div>
-    );
   }
 });
 
