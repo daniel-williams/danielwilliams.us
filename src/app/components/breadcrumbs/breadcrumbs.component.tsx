@@ -18,14 +18,14 @@ const Breadcrumbs = withRouter(class extends React.Component<BreadcrumbsProps, B
   render() {
     const { match, location, history } = this.props;
     const breadcrumbs = this.getCrumbsFromUrl(location.pathname).map((crumb, i) => {
-      return (
-        <Breadcrumb
-          key={crumb.id}
-          path={crumb.path}
-          text={crumb.title}
-          isLink={crumb.path !== location.pathname}
-          showDivider={i > 0}/>
-      );
+      return i > 0
+        ? <Breadcrumb
+            key={crumb.id}
+            path={crumb.path}
+            text={crumb.title}
+            isLink={crumb.path !== location.pathname}
+            showDivider={i > 0}/>
+        : null;
     });
 
     return (

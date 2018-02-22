@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withRouter } from 'react-router-dom';
 import * as classNames from 'classnames';
 
 import { Breakpoint, BreakpointService, compactModes } from '../shared';
@@ -7,16 +8,20 @@ import { linkData, NavMode } from './nav.types';
 import * as styles from './nav.component.scss';
 
 
-interface NavProps {}
+interface NavProps {
+  history: any,
+}
 interface NavState {
+  clicked: boolean,
   hover: boolean,
 }
 
-export class Nav extends React.Component<NavProps, NavState> {
+const Nav = withRouter(class extends React.Component<NavProps, NavState> {
   constructor(props) {
     super(props);
 
     this.state = {
+      clicked: false,
       hover: false,
     };
   }
@@ -28,41 +33,56 @@ export class Nav extends React.Component<NavProps, NavState> {
       <BreakpointService>{breakpoint =>
         <div
           className={this.getNames(breakpoint)}
-          onMouseEnter={this.handleEnter}
           onMouseLeave={this.handleLeave}
           onClick={this.handleClick}>
           <div
             className={styles.logo}
-            style={{backgroundImage: 'url(/assets/images/home.jpg)'}}></div>
-          {items}
+            onClick={this.handleHomeClick}></div>
+          <div
+            className={styles.itemWrap}
+            onMouseEnter={this.handleEnter}>
+            {items}
+          </div>
         </div>
       }</BreakpointService>
     );
   }
 
   getNames = (breakpoint: Breakpoint) => {
-    const { hover } = this.state;
+    const { clicked, hover } = this.state;
 
     return classNames(styles.outerWrap, {
-      [styles.compact]: !hover && compactModes.includes(breakpoint)
+      [styles.clicked]: clicked,
+      [styles.compact]: !hover && compactModes.includes(breakpoint),
     });
+  }
+
+  handleHomeClick = (e) => {
+    this.props.history.push('/')
   }
 
   handleEnter = (e) => {
     this.setState({
       hover: true,
+      clicked: false,
     });
   }
 
   handleLeave = (e) => {
     this.setState({
       hover: false,
+      clicked: false,
     });
   }
 
   handleClick = (e) => {
     this.setState({
       hover: false,
+      clicked: true,
     });
   }
-}
+});
+
+export {
+  Nav
+};
