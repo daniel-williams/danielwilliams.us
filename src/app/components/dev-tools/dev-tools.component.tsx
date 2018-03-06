@@ -1,10 +1,9 @@
 import * as React from 'react';
 
 import { appConstants } from '../../app.constants';
-import { EmptyProps, EmptyState } from '../../models';
 
 
-export class DevTools extends React.Component<EmptyProps, EmptyState> {
+export class DevTools extends React.Component<null, null> {
   renderDevTool() {
     if (appConstants.isDev) {
       const MobxReactDevTools = require('mobx-react-devtools').default;
