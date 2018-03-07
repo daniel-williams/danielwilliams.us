@@ -8,17 +8,21 @@ import './mobx-config'; // configure strict mode and logger
 import { rootStore } from './stores';
 import { Root, DevTools } from './components';
 
-import './app.style.scss';
-
+import * as styles from './app.style.scss';
 
 const App = () => (
-  <Provider {...rootStore}>
-    <DevTools>
-      <Router history={rootStore.router.history}>
-        <Root />
-      </Router>
-    </DevTools>
-  </Provider>
+  <>
+    <div id={styles.app}>
+      <Provider {...rootStore}>
+        <DevTools>
+          <Router history={rootStore.router.history}>
+            <Root />
+          </Router>
+        </DevTools>
+      </Provider>
+    </div>
+    <div id={styles.modal}></div>
+  </>
 );
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('root'));

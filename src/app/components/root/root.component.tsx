@@ -2,13 +2,15 @@ import * as React from 'react';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
 import * as classNames from 'classnames';
 
+import { About } from '../about';
 import { Breadcrumbs } from '../breadcrumbs';
 import { Nav } from '../nav';
 import {
   Breakpoint,
   BreakpointService,
   compactModes,
-  RouteTransition } from '../shared';
+  RouteTransition
+} from '../shared';
 import * as styles from './root.component.scss';
 
 
@@ -55,7 +57,6 @@ export const Root = withRouter(class extends React.Component<any, any> {
 
 const Home = () => <div>Home</div>;
 const Albums = () => <div>Albums</div>;
-const About = () => <div>About</div>;
 const Projects = () => {
   return (
     <Switch>
