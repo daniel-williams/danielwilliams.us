@@ -101,7 +101,7 @@ interface TransitionModalState {}
 export class TransitionModal extends React.Component<TransitionModalProps, TransitionModalState> {
   el;
 
-  getDefaultProps() {
+  static get DefaultProps() {
     return {
       modalKey: 'default',
       click: () => { }
