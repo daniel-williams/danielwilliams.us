@@ -6,17 +6,43 @@ import * as gsap from 'gsap';
 import * as styles from './modal.component.scss';
 
 
-class Modal extends React.Component<any, any> {
+interface ModalProps {
+  onClicked: (e: any) => void,
+}
+
+class Modal extends React.Component<ModalProps, any> {
   backgroundEl;
   contentWrapEl;
   inTimeline;
   outTimeline;
 
+  constructor(props: ModalProps) {
+    super(props);
+  }
+
+  render() {
+    const { children, onClicked } = this.props;
+
+    return (
+      <div className={styles.modalWrap}>
+        <div
+          ref={el => this.backgroundEl = el}
+          className={styles.background}
+          onClick={onClicked}></div>
+        <div
+          ref={el => this.contentWrapEl = el}
+          className={styles.content}>
+          {children}
+        </div>
+      </div>
+    );
+  }
+
   componentWillAppear(cb) {
     const { TimelineLite, TweenLite } = gsap;
 
     this.inTimeline = new TimelineLite({
-      onComplete: this.onTransitionInComplete(cb),
+      onComplete: () => this.onTransitionInComplete(cb),
     });
     this.inTimeline.pause();
 
@@ -34,17 +60,16 @@ class Modal extends React.Component<any, any> {
     }, {
       opacity: 1,
       scale: 1,
-    }), "+=0.5");
+    }));
 
     this.inTimeline.play();
   }
 
   componentWillLeave(cb) {
-    console.log('componentWillLeave');
     const { TimelineLite, TweenLite } = gsap;
 
     this.outTimeline = new TimelineLite({
-      onComplete: this.onTransitionOutComplete(cb),
+      onComplete: () => this.onTransitionOutComplete(cb),
     });
     this.outTimeline.pause();
 
@@ -55,46 +80,32 @@ class Modal extends React.Component<any, any> {
     }, {
       opacity: 0,
       scale: 1.1,
-    }), "+=0.0");
+    }));
 
     // modal fade out
     this.outTimeline.add(TweenLite.fromTo(this.backgroundEl, 0.5, {
       opactity: 1,
     }, {
       opacity: 0,
-    }), "+=0.5");
+    }));
 
     this.outTimeline.play();
   }
 
-  render() {
-    const { children } = this.props;
-
-    return (
-      <div className={styles.modalWrap}>
-        <div ref={el => this.backgroundEl = el} className={styles.background}></div>
-        <div ref={el => this.contentWrapEl = el} className={styles.content}>
-          {children}
-        </div>
-      </div>
-    );
-  }
-
   onTransitionInComplete(cb) {
-    console.log('transition in complete');
     cb();
   }
 
   onTransitionOutComplete(cb) {
-    console.log('transition out complete');
     cb();
   }
 }
 
 let modalEl: Element;
 interface TransitionModalProps {
-  modalKey: string,
-  click: Function,
+  active: boolean,
+  onDeactivated?: () => void,
+  onClicked?: (e: any) => void,
 }
 interface TransitionModalState {}
 
@@ -103,8 +114,9 @@ export class TransitionModal extends React.Component<TransitionModalProps, Trans
 
   static get DefaultProps() {
     return {
-      modalKey: 'default',
-      click: () => { }
+      active: true,
+      onDeactivated: () => { console.log('noop'); },
+      onClicked: (e) => { console.log('noop'); },
     };
   }
 
@@ -125,14 +137,22 @@ export class TransitionModal extends React.Component<TransitionModalProps, Trans
     modalEl.removeChild(this.el);
   }
 
-  render() {
-    const { children, click, modalKey } = this.props;
+  componentWillReceiveProps(nextProps: TransitionModalProps) {
+    console.log('nextProps: ', nextProps);
+  }
 
-    return ReactDOM.createPortal(
-      <TransitionGroup component='div' onClick={click}>
-        <Modal key={modalKey}>
+  render() {
+    const { active, children, onClicked } = this.props;
+    const modal = active
+      ? (
+        <Modal onClicked={onClicked}>
           {children}
         </Modal>
+      ) : null;
+
+    return ReactDOM.createPortal(
+      <TransitionGroup component='div'>
+        {modal}
       </TransitionGroup>, this.el);
   }
 }

@@ -8,28 +8,34 @@ import * as styles from './about.component.scss';
 
 
 interface AboutState {
-  opened: boolean,
+  deactivateModal: boolean,
+  openModal: boolean,
 }
 
 @inject(stores.modal)
 @observer
-export class About extends React.Component<null, AboutState> {
+export class About extends React.Component<{}, AboutState> {
   modalStore: ModalStore;
 
   constructor(props: any) {
     super(props);
 
     this.modalStore = this.props[stores.modal];
-    this.state = { opened: false };
+    this.state = {
+      deactivateModal: false,
+      openModal: false
+    };
   }
 
   render() {
     const { active, activate, deactivate } = this.modalStore;
-    const { opened } = this.state;
+    const { deactivateModal, openModal } = this.state;
 
-    const modal = opened
+    const modal = openModal
       ?
-        <TransitionModal modalKey='default' click={this.handleClick}>
+        <TransitionModal
+          active={!deactivateModal}
+          onClicked={this.handleModalClicked}>
           <div>some modal content for testing</div>
         </TransitionModal>
       : null;
@@ -46,17 +52,17 @@ export class About extends React.Component<null, AboutState> {
     );
   }
 
-  handleClick = (e) => {
+  handleModalClicked = (e) => {
+    console.log('deactivate');
     this.setState({
-      opened: false
+      deactivateModal: true,
     });
-  }
+  };
 
 
   activateModal = (e) => {
-    console.log('dispatch activate modal');
     this.setState({
-      opened: true,
+      openModal: true,
     });
   }
 }
