@@ -8,6 +8,8 @@ import * as styles from './modal.component.scss';
 
 interface ModalProps {
   onClicked: (e: any) => void,
+  onInComplete: () => void,
+  onOutComplete: () => void,
 }
 
 class Modal extends React.Component<ModalProps, any> {
@@ -15,10 +17,6 @@ class Modal extends React.Component<ModalProps, any> {
   contentWrapEl;
   inTimeline;
   outTimeline;
-
-  constructor(props: ModalProps) {
-    super(props);
-  }
 
   render() {
     const { children, onClicked } = this.props;
@@ -93,30 +91,33 @@ class Modal extends React.Component<ModalProps, any> {
   }
 
   onTransitionInComplete(cb) {
+    this.props.onInComplete();
     cb();
   }
 
   onTransitionOutComplete(cb) {
+    this.props.onOutComplete();
     cb();
   }
 }
 
 let modalEl: Element;
 interface TransitionModalProps {
-  active: boolean,
-  onDeactivated?: () => void,
-  onClicked?: (e: any) => void,
+  children?: any,
+  onClosed?: () => void,
 }
-interface TransitionModalState {}
+interface TransitionModalState {
+  active: boolean,
+  content: React.ReactNode,
+}
 
 export class TransitionModal extends React.Component<TransitionModalProps, TransitionModalState> {
-  el;
+  _el;
+  _isMounted: boolean;
 
   static get DefaultProps() {
     return {
-      active: true,
-      onDeactivated: () => { console.log('noop'); },
-      onClicked: (e) => { console.log('noop'); },
+      onClosed: () => {}, // noop
     };
   }
 
@@ -126,33 +127,70 @@ export class TransitionModal extends React.Component<TransitionModalProps, Trans
     const root = document.getElementById('root');
     modalEl = root.childNodes.item(1) as Element;
 
-    this.el = document.createElement('div');
+    this._el = document.createElement('div');
+
+    this.state = {
+      active: true,
+      content: null,
+    };
   }
 
   componentDidMount() {
-    modalEl.appendChild(this.el);
+    this.setContent(this.props.children);
+    modalEl.appendChild(this._el);
   }
 
-  componentWillUnMount() {
-    modalEl.removeChild(this.el);
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+    modalEl.removeChild(this._el);
   }
 
-  componentWillReceiveProps(nextProps: TransitionModalProps) {
-    console.log('nextProps: ', nextProps);
+
+  componentWillReceiveProps(nextProps: React.Props<TransitionModalProps>) {
+    this.setContent(nextProps.children);
+  }
+
+  setContent(content: React.ReactNode) {
+    this.setState({
+      content
+    });
   }
 
   render() {
-    const { active, children, onClicked } = this.props;
-    const modal = active
-      ? (
-        <Modal onClicked={onClicked}>
-          {children}
-        </Modal>
-      ) : null;
+    const { active, content } = this.state;
+
+    if(!content) { return null; }
+
+    const modal = active && (
+      <Modal
+        onClicked={this.handleClick}
+        onInComplete={this.handleInComplete}
+        onOutComplete={this.handleOutComplete}>
+        {content}
+      </Modal>
+    );
 
     return ReactDOM.createPortal(
       <TransitionGroup component='div'>
         {modal}
-      </TransitionGroup>, this.el);
+      </TransitionGroup>, this._el);
+  }
+
+  handleClick = (e: any) => {
+    this.setState({
+      active: false,
+    });
+  }
+
+  handleInComplete = () => {
+    console.log('handleInComplete');
+  }
+
+  handleOutComplete = () => {
+    console.log('handleOutComplete');
+
+    this.setState({
+      content: null,
+    }, this.props.onClosed);
   }
 }

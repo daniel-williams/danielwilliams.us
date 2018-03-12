@@ -1,0 +1,6 @@
+<div><h3>My Light DOM</h3></div>
+<script>
+var root = document.querySelector('div').createShadowRoot();
+root.innerHTML = '<style>h3{ color: pink; }</style>' +
+                     '<h3>Hello Shadow DOM!</h3>';
+</script>

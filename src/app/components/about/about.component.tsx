@@ -8,8 +8,7 @@ import * as styles from './about.component.scss';
 
 
 interface AboutState {
-  deactivateModal: boolean,
-  openModal: boolean,
+  showModal: boolean,
 }
 
 @inject(stores.modal)
@@ -22,47 +21,40 @@ export class About extends React.Component<{}, AboutState> {
 
     this.modalStore = this.props[stores.modal];
     this.state = {
-      deactivateModal: false,
-      openModal: false
+      showModal: false
     };
   }
 
   render() {
-    const { active, activate, deactivate } = this.modalStore;
-    const { deactivateModal, openModal } = this.state;
+    const { showModal } = this.state;
 
-    const modal = openModal
-      ?
-        <TransitionModal
-          active={!deactivateModal}
-          onClicked={this.handleModalClicked}>
-          <div>some modal content for testing</div>
-        </TransitionModal>
-      : null;
+    const modal = showModal && (
+      <TransitionModal onClosed={this.handleModalClosed}>
+        <div>some modal content for testing</div>
+      </TransitionModal>
+    );
 
     return (
       <div className={styles.aboutWrap}>
         <div>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis unde consequatur soluta molestiae non adipisci necessitatibus repellendus beatae quod cupiditate quisquam eos doloremque vero ex quaerat doloribus, odio harum explicabo?</p>
           <p>Cum iusto, provident velit autem et amet dignissimos maxime quibusdam, modi architecto, nam minima! Sit perferendis, commodi minus possimus laboriosam doloremque optio illum velit iusto unde nostrum! Harum, et obcaecati!</p>
-          <button onClick={this.activateModal}>open</button>
+          <button onClick={this.handleShowModal}>open</button>
         </div>
         {modal}
       </div>
     );
   }
 
-  handleModalClicked = (e) => {
-    console.log('deactivate');
+  handleShowModal = (e) => {
     this.setState({
-      deactivateModal: true,
+      showModal: true,
     });
-  };
+  }
 
-
-  activateModal = (e) => {
+  handleModalClosed = () => {
     this.setState({
-      openModal: true,
+      showModal: false,
     });
   }
 }
