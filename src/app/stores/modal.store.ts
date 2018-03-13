@@ -6,13 +6,11 @@ export class ModalStore {
 
   @action
   activate = () => {
-    console.log('activate modal');
     this.active = true;
   }
 
   @action
   deactivate = () => {
-    console.log('deactivate modal');
     this.active = false;
   }
 }

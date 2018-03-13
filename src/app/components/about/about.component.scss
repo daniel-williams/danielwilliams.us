@@ -1,3 +1,18 @@
 .aboutWrap {
   min-height: 200px;
 }
+
+.contentFrame {
+  position: relative;
+  overflow: hidden;
+}
+.modalContent {
+  opacity: 0;
+  transform: translateY(5%);
+  transition: all .3s ease-out;
+
+  &.ready {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

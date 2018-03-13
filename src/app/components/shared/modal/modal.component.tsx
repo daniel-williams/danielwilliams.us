@@ -7,7 +7,7 @@ import * as styles from './modal.component.scss';
 
 
 interface ModalProps {
-  onClicked: (e: any) => void,
+  onClose: (e: any) => void,
   onInComplete: () => void,
   onOutComplete: () => void,
 }
@@ -19,20 +19,30 @@ class Modal extends React.Component<ModalProps, any> {
   outTimeline;
 
   render() {
-    const { children, onClicked } = this.props;
+    const { clientWidth = 0, clientHeight = 0 } = window.document.body || {};
+    const contentWrapStyle = {
+      width: '' + Math.max(300, Math.min(1200, clientWidth * 0.9)) + 'px',
+      height: '' + Math.max(300, Math.min(1200, clientHeight * 0.9)) + 'px',
+    };
+    const { children, onClose } = this.props;
 
     return (
-      <div className={styles.modalWrap}>
+      <>
         <div
           ref={el => this.backgroundEl = el}
           className={styles.background}
-          onClick={onClicked}></div>
+          onClick={onClose}></div>
         <div
           ref={el => this.contentWrapEl = el}
-          className={styles.content}>
-          {children}
+          className={styles.contentWrap} style={contentWrapStyle}>
+          <div className={styles.closeButton} onClick={onClose}><i className="fas fa-times"></i></div>
+          <div className={styles.contentScroller}>
+            <div className={styles.content}>
+              {children}
+            </div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -58,7 +68,7 @@ class Modal extends React.Component<ModalProps, any> {
     }, {
       opacity: 1,
       scale: 1,
-    }));
+    }), '-=0.2');
 
     this.inTimeline.play();
   }
@@ -105,6 +115,7 @@ let modalEl: Element;
 interface TransitionModalProps {
   children?: any,
   onClosed?: () => void,
+  onReady?: () => void,
 }
 interface TransitionModalState {
   active: boolean,
@@ -112,12 +123,10 @@ interface TransitionModalState {
 }
 
 export class TransitionModal extends React.Component<TransitionModalProps, TransitionModalState> {
-  _el;
-  _isMounted: boolean;
-
-  static get DefaultProps() {
+  static get defaultProps() {
     return {
       onClosed: () => {}, // noop
+      onReady: () => {}, // noop
     };
   }
 
@@ -127,8 +136,6 @@ export class TransitionModal extends React.Component<TransitionModalProps, Trans
     const root = document.getElementById('root');
     modalEl = root.childNodes.item(1) as Element;
 
-    this._el = document.createElement('div');
-
     this.state = {
       active: true,
       content: null,
@@ -137,14 +144,12 @@ export class TransitionModal extends React.Component<TransitionModalProps, Trans
 
   componentDidMount() {
     this.setContent(this.props.children);
-    modalEl.appendChild(this._el);
+    document.addEventListener("keydown", this.handleEscKey, false);
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount');
-    modalEl.removeChild(this._el);
+    document.removeEventListener("keydown", this.handleEscKey, false);
   }
-
 
   componentWillReceiveProps(nextProps: React.Props<TransitionModalProps>) {
     this.setContent(nextProps.children);
@@ -163,7 +168,7 @@ export class TransitionModal extends React.Component<TransitionModalProps, Trans
 
     const modal = active && (
       <Modal
-        onClicked={this.handleClick}
+        onClose={this.handleClose}
         onInComplete={this.handleInComplete}
         onOutComplete={this.handleOutComplete}>
         {content}
@@ -171,26 +176,30 @@ export class TransitionModal extends React.Component<TransitionModalProps, Trans
     );
 
     return ReactDOM.createPortal(
-      <TransitionGroup component='div'>
+      <TransitionGroup className={styles.modal} component='div'>
         {modal}
-      </TransitionGroup>, this._el);
+      </TransitionGroup>, modalEl);
   }
 
-  handleClick = (e: any) => {
+  handleClose = (e: any) => {
     this.setState({
       active: false,
     });
-  }
+  };
 
   handleInComplete = () => {
-    console.log('handleInComplete');
-  }
+    this.props.onReady();
+  };
 
   handleOutComplete = () => {
-    console.log('handleOutComplete');
-
     this.setState({
       content: null,
     }, this.props.onClosed);
+  };
+
+  handleEscKey = (e) => {
+    if(e.keyCode === 27) {
+      this.handleClose(e);
+    }
   }
 }

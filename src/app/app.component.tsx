@@ -21,7 +21,7 @@ const App = () => (
         </DevTools>
       </Provider>
     </div>
-    <div id={styles.modal}></div>
+    <div id={styles.modalWrap}></div>
   </>
 );
 
