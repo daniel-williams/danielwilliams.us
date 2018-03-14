@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 
 import { stores, ModalStore } from '../../stores';
 
-import { TransitionModal } from '../shared';
+import { TransitionModal, VideoPlayer } from '../shared';
 import * as styles from './about.component.scss';
 
 
@@ -111,6 +111,8 @@ const modal1Content = () => (
 const modal2Content = () => (
   <>
     <h1>Modal 2 content</h1>
+    <VideoPlayer src='/assets/videos/test1.mp4' autoPlay />
     <div>some modal content for testing</div>
+
   </>
 );
