@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
 import * as classNames from 'classnames';
 
+import { Albums } from '../albums';
 import { About } from '../about';
 import { Breadcrumbs } from '../breadcrumbs';
 import { Nav } from '../nav';
@@ -56,7 +57,6 @@ export const Root = withRouter(class extends React.Component<any, any> {
 });
 
 const Home = () => <div>Home</div>;
-const Albums = () => <div>Albums</div>;
 const Projects = () => {
   return (
     <Switch>
