@@ -6,7 +6,7 @@ import { Router } from 'react-router';
 
 import './mobx-config'; // configure strict mode and logger
 import { rootStore } from './stores';
-import { Root, DevTools } from './components';
+import { RootLayoutManager } from './components';
 
 import * as styles from './app.style.scss';
 
@@ -14,11 +14,9 @@ const App = () => (
   <>
     <div id={styles.app}>
       <Provider {...rootStore}>
-        <DevTools>
-          <Router history={rootStore.router.history}>
-            <Root />
-          </Router>
-        </DevTools>
+        <Router history={rootStore.router.history}>
+          <RootLayoutManager />
+        </Router>
       </Provider>
     </div>
     <div id={styles.modalWrap}></div>

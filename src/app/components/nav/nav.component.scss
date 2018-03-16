@@ -4,7 +4,7 @@
   overflow: hidden;
   background-color: gainsboro;
 
-  width: 220px;
+  width: 100%;
   min-height: 100vh;
   transition: width 150ms cubic-bezier(1, 0, 1, 0.9);
 
@@ -24,10 +24,10 @@
     flex-grow: 1;
   }
 
-  &.compact {
-    width: 50px;
-  }
-  &.compact.clicked {
-    transition: width 0ms;
-  }
+  // &.compact {
+  //   width: 50px;
+  // }
+  // &.compact.clicked {
+  //   transition: width 0ms;
+  // }
 }

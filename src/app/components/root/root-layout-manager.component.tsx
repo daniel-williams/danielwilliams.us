@@ -1,60 +1,94 @@
 import * as React from 'react';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
-import * as classNames from 'classnames';
 
 import { Albums } from '../albums';
 import { About } from '../about';
-import { Breadcrumbs } from '../breadcrumbs';
 import { Nav } from '../nav';
 import {
   Breakpoints,
-  ViewportService,
   compactModes,
-  RouteTransition
+  RouteTransition,
+  ViewportService,
+  Viewport
 } from '../shared';
-import * as styles from './root.component.scss';
+import * as styles from './root-layout-manager.component.scss';
 
+interface RootLayoutManagerProps {}
+interface RootLayoutManagerState {
+  hover: boolean;
+}
 
-export const Root = withRouter(class extends React.Component<any, any> {
-  constructor(props) {
+export class RootLayoutManager extends React.Component<RootLayoutManagerProps, RootLayoutManagerState> {
+  constructor(props: RootLayoutManagerProps) {
     super(props);
+
+    this.state = {
+      hover: false,
+    };
   }
 
   render() {
-    const { location } = this.props;
-
     return (
       <ViewportService>{viewport =>
         <div className={styles.rootWrap}>
-          <div className={styles.navWrap}>
-            <Nav></Nav>
+          <div
+            className={styles.leftSizer}
+            style={this.getLeftStyle(viewport)}
+            onMouseEnter={this.handleEnter}
+            onMouseLeave={this.handleLeave}>
+            <Nav/>
           </div>
-          <div className={this.getNames(viewport.breakpoint)}>
-            <div className={styles.breadcrumbWrap}>
-              <Breadcrumbs></Breadcrumbs>
-            </div>
-            <div className={styles.contentInnerWrap}>
-              <RouteTransition>
-                <Switch>
-                  <Route exact path='/' component={Home} />
-                  <Route path='/projects' component={Projects} />
-                  <Route path='/albums' component={Albums} />
-                  <Route path='/about' component={About} />
-                </Switch>
-              </RouteTransition>
-            </div>
+          <div className={styles.rightSizer} style={this.getRightStyle(viewport)}>
+            <RouteTransition>
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route path='/projects' component={Projects} />
+                <Route path='/albums' component={Albums} />
+                <Route path='/about' component={About} />
+              </Switch>
+            </RouteTransition>
           </div>
         </div>
       }</ViewportService>
     );
   }
 
-  getNames(breakpoint: Breakpoints) {
-    return classNames(styles.contentOuterWrap, {
-      [styles.compact]: compactModes.includes(breakpoint)
+  getLeftStyle = (viewport: Viewport) => {
+    const { hover } = this.state;
+    const width = (!hover && compactModes.includes(viewport.breakpoint))
+    ? 50
+    : 220;
+
+    return {
+      width,
+    };
+  };
+
+  getRightStyle(viewport: Viewport) {
+    const { hover } = this.state;
+    const width = viewport.dimensions.width - (
+      (!hover && compactModes.includes(viewport.breakpoint))
+        ? 50
+        : 220
+    );
+
+    return {
+      width,
+    };
+  }
+
+  handleEnter = (e) => {
+    this.setState({
+      hover: true,
     });
   }
-});
+
+  handleLeave = (e) => {
+    this.setState({
+      hover: false,
+    });
+  }
+}
 
 const Home = () => <div>Home</div>;
 const Projects = () => {
