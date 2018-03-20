@@ -11,7 +11,6 @@ interface NavProps {
   history: any,
 }
 interface NavState {
-  clicked: boolean,
   hover: boolean,
 }
 
@@ -20,7 +19,6 @@ export const Nav = withRouter(class extends React.Component<NavProps, NavState> 
     super(props);
 
     this.state = {
-      clicked: false,
       hover: false,
     };
   }
