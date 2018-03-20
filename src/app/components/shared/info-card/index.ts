@@ -1,2 +1,2 @@
 export * from './info-card.component';
-export * from './layout-manager.component';
+export * from './info-card-grid.component';
