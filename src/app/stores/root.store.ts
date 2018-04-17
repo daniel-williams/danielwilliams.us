@@ -4,8 +4,8 @@ import { ModalStore } from './modal.store';
 import { RouterStore } from './router.store';
 
 
-const modal = new ModalStore();
 const history = createBrowserHistory();
+const modal = new ModalStore();
 const router = new RouterStore(history);
 
 // MobX rootStore

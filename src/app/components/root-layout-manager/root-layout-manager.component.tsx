@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link, Switch, Route, withRouter } from 'react-router-dom';
 
+import Constants from '../../app-constants';
 import { Albums } from '../albums';
 import { About } from '../about';
 import { Nav } from '../nav';
@@ -56,8 +57,8 @@ export class RootLayoutManager extends React.Component<RootLayoutManagerProps, R
   getLeftStyle = (viewport: Viewport) => {
     const { hover } = this.state;
     const width = (!hover && compactModes.includes(viewport.breakpoint))
-    ? 50
-    : 220;
+      ? Constants.layout.root.left
+      : Constants.layout.root.right;
 
     return {
       width,
@@ -68,8 +69,8 @@ export class RootLayoutManager extends React.Component<RootLayoutManagerProps, R
     const { hover } = this.state;
     const width = viewport.dimensions.width - (
       (!hover && compactModes.includes(viewport.breakpoint))
-        ? 50
-        : 220
+        ? Constants.layout.root.left
+        : Constants.layout.root.right
     );
 
     return {
