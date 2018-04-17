@@ -1,18 +1,19 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as TransitionGroup from 'react-transition-group/TransitionGroup';
 import * as gsap from 'gsap';
 
+import Constants from '../../../app-constants';
 import * as styles from './modal.component.scss';
 
+
+const { minWidth, maxWidth, duration } = Constants.modal;
 
 interface ModalProps {
   onClose: (e: any) => void,
   onInComplete: () => void,
-  onOutComplete: () => void,
+  onOutComplete: (cb) => void,
 }
 
-class Modal extends React.Component<ModalProps, any> {
+export class Modal extends React.Component<ModalProps, {}> {
   backgroundEl;
   contentWrapEl;
   inTimeline;
@@ -21,8 +22,8 @@ class Modal extends React.Component<ModalProps, any> {
   render() {
     const { clientWidth = 0, clientHeight = 0 } = window.document.body || {};
     const contentWrapStyle = {
-      width: '' + Math.max(300, Math.min(1200, clientWidth * 0.9)) + 'px',
-      height: '' + Math.max(300, Math.min(1200, clientHeight * 0.9)) + 'px',
+      width: '' + Math.max(Constants.modal.minWidth, Math.min(maxWidth, clientWidth * 0.9)) + 'px',
+      height: '' + Math.max(minWidth, Math.min(maxWidth, clientHeight * 0.9)) + 'px',
     };
     const { children, onClose } = this.props;
 
@@ -55,14 +56,14 @@ class Modal extends React.Component<ModalProps, any> {
     this.inTimeline.pause();
 
     // modal fade In
-    this.inTimeline.add(TweenLite.fromTo(this.backgroundEl, 0.5, {
+    this.inTimeline.add(TweenLite.fromTo(this.backgroundEl, duration, {
       opacity: 0,
     }, {
       opacity: 1,
     }));
 
     // content fade In
-    this.inTimeline.add(TweenLite.fromTo(this.contentWrapEl, 0.5, {
+    this.inTimeline.add(TweenLite.fromTo(this.contentWrapEl, duration, {
       opacity: 0,
       scale: 1.1,
     }, {
@@ -82,7 +83,7 @@ class Modal extends React.Component<ModalProps, any> {
     this.outTimeline.pause();
 
     // content fade out
-    this.outTimeline.add(TweenLite.fromTo(this.contentWrapEl, 0.5, {
+    this.outTimeline.add(TweenLite.fromTo(this.contentWrapEl, duration, {
       opacity: 1,
       scale: 1,
     }, {
@@ -91,7 +92,7 @@ class Modal extends React.Component<ModalProps, any> {
     }));
 
     // modal fade out
-    this.outTimeline.add(TweenLite.fromTo(this.backgroundEl, 0.5, {
+    this.outTimeline.add(TweenLite.fromTo(this.backgroundEl, duration, {
       opactity: 1,
     }, {
       opacity: 0,
@@ -106,100 +107,6 @@ class Modal extends React.Component<ModalProps, any> {
   }
 
   onTransitionOutComplete(cb) {
-    this.props.onOutComplete();
-    cb();
-  }
-}
-
-let modalEl: Element;
-interface TransitionModalProps {
-  children?: any,
-  onClosed?: () => void,
-  onReady?: () => void,
-}
-interface TransitionModalState {
-  active: boolean,
-  content: React.ReactNode,
-}
-
-export class TransitionModal extends React.Component<TransitionModalProps, TransitionModalState> {
-  static get defaultProps() {
-    return {
-      onClosed: () => {}, // noop
-      onReady: () => {}, // noop
-    };
-  }
-
-  constructor(props: TransitionModalProps) {
-    super(props);
-
-    const root = document.getElementById('root');
-    modalEl = root.childNodes.item(1) as Element;
-
-    this.state = {
-      active: true,
-      content: null,
-    };
-  }
-
-  componentDidMount() {
-    this.setContent(this.props.children);
-    document.addEventListener("keydown", this.handleEscKey, false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleEscKey, false);
-  }
-
-  componentWillReceiveProps(nextProps: React.Props<TransitionModalProps>) {
-    this.setContent(nextProps.children);
-  }
-
-  setContent(content: React.ReactNode) {
-    this.setState({
-      content
-    });
-  }
-
-  render() {
-    const { active, content } = this.state;
-
-    if(!content) { return null; }
-
-    const modal = active && (
-      <Modal
-        onClose={this.handleClose}
-        onInComplete={this.handleInComplete}
-        onOutComplete={this.handleOutComplete}>
-        {content}
-      </Modal>
-    );
-
-    return ReactDOM.createPortal(
-      <TransitionGroup className={styles.modal} component='div'>
-        {modal}
-      </TransitionGroup>, modalEl);
-  }
-
-  handleClose = (e: any) => {
-    this.setState({
-      active: false,
-    });
-  };
-
-  handleInComplete = () => {
-    this.props.onReady();
-  };
-
-  handleOutComplete = () => {
-    this.setState({
-      content: null,
-    }, this.props.onClosed);
-  };
-
-  handleEscKey = (e) => {
-    if(e.keyCode === 27) {
-      this.handleClose(e);
-    }
+    this.props.onOutComplete(cb);
   }
 }

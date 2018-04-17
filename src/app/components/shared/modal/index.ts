@@ -1,1 +1,1 @@
-export * from './modal.component';
+export * from './transition-modal.component';
