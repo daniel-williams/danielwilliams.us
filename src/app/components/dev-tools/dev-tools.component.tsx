@@ -20,4 +20,4 @@ export class DevTools extends React.Component<{}, {}> {
       </div>
     );
   }
-};
+}

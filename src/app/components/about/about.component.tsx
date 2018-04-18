@@ -1,8 +1,5 @@
 import * as React from 'react';
-import { inject, observer } from 'mobx-react';
 import * as classNames from 'classnames';
-
-import { stores, ModalStore } from '../../stores';
 
 import { TransitionModal, VideoPlayer } from '../shared';
 import * as styles from './about.component.scss';
@@ -14,15 +11,10 @@ interface AboutState {
   showModal: boolean,
 }
 
-@inject(stores.modal)
-@observer
 export class About extends React.Component<{}, AboutState> {
-  modalStore: ModalStore;
-
   constructor(props: any) {
     super(props);
 
-    this.modalStore = this.props[stores.modal];
     this.state = {
       content: null,
       ready: false,

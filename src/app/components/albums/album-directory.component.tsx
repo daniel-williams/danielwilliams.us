@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { InfoCard, InfoCardGrid } from '../shared';
 import * as styles from './album-directory.component.scss';
@@ -9,7 +9,7 @@ interface AlbumDirectoryProps {
   history: any;
 }
 
-export const AlbumDirectory = withRouter(class extends React.Component<AlbumDirectoryProps, {}> {
+export const AlbumDirectory = withRouter(class extends React.Component<RouteComponentProps<AlbumDirectoryProps>, {}> {
   render() {
     const cards = [
       {route: '/albums/one', comp: Card1},

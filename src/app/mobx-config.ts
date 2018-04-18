@@ -1,11 +1,13 @@
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 import { enableLogging } from 'mobx-logger';
 
 import Constants from './app-constants';
 
 
-// MobX strict mode
-useStrict(true);
+// don't allow state modifications outside actions
+configure({
+  enforceActions: true,
+});
 
 // MobX logging
 if(Constants.app.logInfo) {
