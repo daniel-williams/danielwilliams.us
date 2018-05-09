@@ -29,7 +29,9 @@ export class InfoCard extends React.Component<InfoCardProps, {}> {
         onMouseEnter={this.handleMouseEnter.bind(this, onMouseEnter)}
         onMouseLeave={this.handleMouseLeave.bind(this, onMouseLeave)}
         style={style}>
-        {children}
+        <div className={styles.innerWrap}>
+          {children}
+        </div>
       </div>
     );
   }

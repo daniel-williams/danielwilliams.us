@@ -6,11 +6,13 @@ import * as styles from './album-directory.component.scss';
 
 
 interface AlbumDirectoryProps {
+  dimensions: any;
   history: any;
 }
 
-export const AlbumDirectory = withRouter(class extends React.Component<RouteComponentProps<AlbumDirectoryProps>, {}> {
+export const AlbumDirectory = withRouter(class extends React.Component<AlbumDirectoryProps & RouteComponentProps<AlbumDirectoryProps>, {}> {
   render() {
+    const { dimensions } = this.props;
     const cards = [
       {route: '/albums/one', comp: Card1},
       {route: '/albums/two', comp: Card2},
@@ -19,7 +21,7 @@ export const AlbumDirectory = withRouter(class extends React.Component<RouteComp
     ];
     const itemStyles = {
       minWidth: '300px',
-      maxWidth: '500px',
+      maxWidth: `${(dimensions.width / 2) - 17}px`,
       height: '100%',
     };
     const items = cards.map((x, i) => (

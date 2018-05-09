@@ -39,7 +39,9 @@ export class RootLayoutManager extends React.Component<RootLayoutManagerProps, R
             onMouseLeave={this.handleLeave}>
             <Nav/>
           </div>
-          <div className={styles.rightSizer} style={this.getRightStyle(viewport)}>
+          <div
+            className={styles.rightSizer}
+            style={this.getRightStyle(viewport)}>
             <RouteTransition>
               <Switch>
                 <Route exact path='/' component={Home} />

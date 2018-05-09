@@ -24,9 +24,7 @@ export class InfoCardGrid extends React.Component<{}, {}> {
         {moData =>
           <div className={styles.gridWrap}>
             {moData.map((_, i) =>
-              <div key={i} style={{
-                marginBottom: '15px',
-                marginRight: '15px',
+              <div key={i} className={styles.gridItemWrap} style={{
                 transform: `translatey(${_.y}%)`,
                 opacity: _.opacity}}>
                 {items[i]}
