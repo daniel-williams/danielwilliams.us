@@ -18,8 +18,8 @@
       "dom"
     ]
   },
-  "include": [
-    "src",
-    "config/typings"
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

@@ -17,8 +17,8 @@ module.exports = function (options) {
   return {
     entry: {
       'app': './src/app',
-      'polyfills': './src/polyfills.tsx',
-      'vendor': './src/vendor.tsx',
+      'polyfills': './src/polyfills.ts',
+      'vendor': './src/vendor.ts',
       'vendorStyles': [
         './client/assets/styles/fontawesome-all.css',
       ],
