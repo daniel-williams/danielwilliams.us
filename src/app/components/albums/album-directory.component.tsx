@@ -1,44 +1,57 @@
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
+import { AlbumsStore, stores, StoreState } from '../../stores';
 import { InfoCard, InfoCardGrid } from '../shared';
 import * as styles from './album-directory.component.scss';
 
 
 interface AlbumDirectoryProps {
+  albums?: AlbumsStore;
   dimensions: any;
   history: any;
 }
 
-export const AlbumDirectory = withRouter(class extends React.Component<AlbumDirectoryProps & RouteComponentProps<AlbumDirectoryProps>, {}> {
+@inject(stores.albums)
+@observer
+class AlbumDirectoryComp extends React.Component<AlbumDirectoryProps & RouteComponentProps<AlbumDirectoryProps>, {}> {
+  componentDidMount() {
+    const { albums } = this.props;
+
+    if(albums.state === StoreState.stale) {
+      albums.fetchAlbums();
+    }
+  }
+
   render() {
-    const { dimensions } = this.props;
-    const cards = [
-      {route: '/albums/one', comp: Card1},
-      {route: '/albums/two', comp: Card2},
-      {route: '/albums/one', comp: Card3},
-      {route: '/albums/two', comp: Card4},
-    ];
+    const { albums, dimensions } = this.props;
     const itemStyles = {
       minWidth: '300px',
       maxWidth: `${(dimensions.width / 2) - 17}px`,
       height: '100%',
     };
-    const items = cards.map((x, i) => (
+    const items = albums.albums.map(item => (
       <InfoCard
-        key={x.route}
-        onClick={e => this.toRoute(x.route)}
+        key={item.id}
+        onClick={e => this.toRoute(`/albums/${item.id}`)}
         style={itemStyles}>
-        {x.comp}
+        <AlbumCard title={item.title} description={item.description} />
       </InfoCard>
     ));
+
+    const grid = items.length
+      ? (
+        <InfoCardGrid>
+          {items}
+        </InfoCardGrid>
+        )
+      : null;
 
     return (
       <div>
         <h1>Albums</h1>
-        <InfoCardGrid>
-          {items}
-        </InfoCardGrid>
+        {grid}
       </div>
     );
   }
@@ -46,35 +59,12 @@ export const AlbumDirectory = withRouter(class extends React.Component<AlbumDire
   toRoute = (path: string) => {
     this.props.history.push(path);
   };
-});
+}
+
+export const AlbumDirectory = withRouter(AlbumDirectoryComp);
 
 
-const Card1 = (
-  <>
-    <h2>Emerald City</h2>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, possimus! Asperiores, non nemo, dolorum voluptas, a repellat excepturi ratione ipsam sit magni rem placeat ipsum. Accusamus ducimus aspernatur quod tenetur!</p>
-  </>
-);
-
-const Card2 = (
-  <>
-    <h2>Microsoft Life</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sit asperiores, neque saepe quisquam impedit quae consequatur, harum tempora temporibus quo. Iusto, quasi ratione corporis corrupti deserunt officiis nisi aspernatur!</p>
-    <p>Ex unde sunt id facere, enim quia numquam tempore cupiditate reiciendis nisi voluptatibus aliquid vitae, atque hic quas. Consectetur dolorem vero possimus sint modi minus placeat, laudantium eveniet error debitis.</p>
-  </>
-);
-
-const Card3 = (
-  <>
-    <h2>Emerald City</h2>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure, possimus! Asperiores, non nemo, dolorum voluptas, a repellat excepturi ratione ipsam sit magni rem placeat ipsum. Accusamus ducimus aspernatur quod tenetur!</p>
-  </>
-);
-
-const Card4 = (
-  <>
-    <h2>Microsoft Life</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sit asperiores, neque saepe quisquam impedit quae consequatur, harum tempora temporibus quo. Iusto, quasi ratione corporis corrupti deserunt officiis nisi aspernatur!</p>
-    <p>Ex unde sunt id facere, enim quia numquam tempore cupiditate reiciendis nisi voluptatibus aliquid vitae, atque hic quas. Consectetur dolorem vero possimus sint modi minus placeat, laudantium eveniet error debitis.</p>
-  </>
-);
+const AlbumCard = (props) => <>
+  <h2>{props.title}</h2>
+  <p>{props.description}</p>
+</>;

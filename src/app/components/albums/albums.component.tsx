@@ -2,12 +2,10 @@ import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Measure from 'react-measure';
 
-import {
-  AlbumDirectory,
-  Album1,
-  Album2
-} from './';
+import { AlbumDirectory } from './album-directory.component';
+import { Album } from './album.component';
 import * as styles from './albums.component.scss';
+
 
 interface AlbumsProps {}
 interface AlbumsState {
@@ -41,9 +39,14 @@ export class Albums extends React.Component<AlbumsProps, AlbumsState> {
       >{({ measureRef }) =>
         <div ref={measureRef} className={styles.albumsWrap}>
           <Switch>
-            <Route exact path='/albums' render={(props) => <AlbumDirectory {...props} dimensions={this.state.dimensions} />} />
-            <Route path='/albums/one' component={Album1} />
-            <Route path='/albums/two' component={Album2} />
+            <Route
+              exact
+              path='/albums'
+              render={
+                props => <AlbumDirectory dimensions={this.state.dimensions} {...props} />
+              }
+            />
+            <Route path='/albums/:id' component={Album} />
           </Switch>
         </div>
       }</Measure>
