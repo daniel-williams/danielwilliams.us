@@ -7,6 +7,8 @@ import { InfoCard, InfoCardGrid } from '../shared';
 import * as styles from './album-directory.component.scss';
 
 
+const albumAssets = '/assets/albums';
+
 interface AlbumDirectoryProps {
   albums?: AlbumsStore;
   dimensions: any;
@@ -36,16 +38,15 @@ class AlbumDirectoryComp extends React.Component<AlbumDirectoryProps & RouteComp
         key={item.id}
         onClick={e => this.toRoute(`/albums/${item.id}`)}
         style={itemStyles}>
-        <AlbumCard title={item.title} description={item.description} />
+        <AlbumCard {...item} />
       </InfoCard>
     ));
 
     const grid = items.length
-      ? (
+      ?
         <InfoCardGrid>
           {items}
         </InfoCardGrid>
-        )
       : null;
 
     return (
@@ -66,5 +67,19 @@ export const AlbumDirectory = withRouter(AlbumDirectoryComp);
 
 const AlbumCard = (props) => <>
   <h2>{props.title}</h2>
-  <p>{props.description}</p>
+  <div className={styles.albumSummary}>
+    <AlbumPoster {...props} />
+    <div className={styles.description}>{props.description}</div>
+  </div>
 </>;
+
+const AlbumPoster = (props) => {
+  const { poster } = props;
+
+  return poster
+    ?
+      <div className={styles.poster}>
+        <img src={`${albumAssets}/${props.poster}`} alt='album poster' />
+      </div>
+    : null;
+}

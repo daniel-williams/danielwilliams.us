@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import { StoreState } from './store-state';
 
 const albumsEndpoint = 'http://localhost:5000/api/albums';
-const albumsRoot = '/assets/images/albums/';
+const albumsRoot = '/assets/albums/';
 
 class Album {
   id: number;
@@ -17,7 +17,7 @@ class Album {
     this.id = id;
     this.title = title;
     this.description = description;
-    this.poster = poster || `${albumsRoot}${id}/poster.png`;
+    this.poster = poster;
     this.items = items;
   }
 }

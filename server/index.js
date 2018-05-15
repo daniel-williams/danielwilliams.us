@@ -16,15 +16,11 @@ app.get('/api/albums', (req, res) => {
 });
 
 app.get('/api/albums/:id', (req, res) => {
-  res.send(getAlbumItems(req.params.id));
+  const albumId = parseInt(req.params.id);
+  const items = appData.items
+    .filter(item => item.albumIds.includes(albumId));
+
+  res.send(items);
 });
 
 app.listen(PORT, () => console.log(`API listening on port ${PORT}.`));
-
-
-function getAlbumItems(id) {
-  const albumId = parseInt(id);
-
-  return appData.items
-    .filter(item => item.albumIds.includes(albumId));
-}

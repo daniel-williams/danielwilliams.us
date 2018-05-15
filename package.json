@@ -12,10 +12,11 @@
     "url": "https://github.com/daniel-williams/react-mobx-nimble"
   },
   "scripts": {
-    "build:prod": "cross-env NODE_ENV=production npm run webpack-build",
-    "dev": "cross-env NODE_ENV=dev concurrently --kill-others-on-fail \"npm run start:api\" \"npm run webpack-dev-server\"",
+    "build": "cross-env NODE_ENV=production npm run webpack-build",
+    "dev": "cross-env NODE_ENV=dev npm run webpack-dev-server",
+    "dev:server": "cross-env NODE_ENV=dev concurrently --kill-others-on-fail \"npm run start:api\" \"npm run webpack-dev-server\"",
     "start": "npm run dev",
-    "start:api": "node ./server",
+    "server": "node ./server",
     "webpack-build": "rimraf dist && webpack --config config/webpack.build.js --progress --profile --bail",
     "webpack-dev-server": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch --content-base client/"
   },
